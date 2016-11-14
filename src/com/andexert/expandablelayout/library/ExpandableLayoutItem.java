@@ -42,6 +42,7 @@ public class ExpandableLayoutItem extends RelativeLayout {
 	private Integer duration;
 	private FrameLayout contentLayout;
 	private FrameLayout headerLayout;
+	private FrameLayout bottomLayout;
 	private Boolean closeByUser = true;
 
 	public ExpandableLayoutItem(Context context) {
@@ -67,9 +68,11 @@ public class ExpandableLayoutItem extends RelativeLayout {
 		final TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.ExpandableLayout);
 		final int headerID = typedArray.getResourceId(R.styleable.ExpandableLayout_el_headerLayout, -1);
 		final int contentID = typedArray.getResourceId(R.styleable.ExpandableLayout_el_contentLayout, -1);
+		final int bottomID = typedArray.getResourceId(R.styleable.ExpandableLayout_el_bottomLayout, -1);
 		contentLayout = (FrameLayout) rootView.findViewById(R.id.view_expandable_contentLayout);
+		bottomLayout = (FrameLayout) rootView.findViewById(R.id.view_expandable_bottomLayout);
 
-		if (headerID == -1 || contentID == -1)
+		if (headerID == -1 || contentID == -1 || bottomID == -1)
 			throw new IllegalArgumentException("HeaderLayout and ContentLayout cannot be null!");
 
 		if (isInEditMode())
@@ -84,7 +87,10 @@ public class ExpandableLayoutItem extends RelativeLayout {
 		final View contentView = View.inflate(context, contentID, null);
 		contentView.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		contentLayout.addView(contentView);
-		contentLayout.setVisibility(VISIBLE);
+
+		final View bottomView = View.inflate(context, bottomID, null);
+		bottomView.setLayoutParams(new ViewGroup.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+		bottomLayout.addView(bottomView);
 
 		headerLayout.setOnTouchListener(new OnTouchListener() {
 			@Override
